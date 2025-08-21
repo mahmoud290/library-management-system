@@ -15,10 +15,10 @@ export class User{
     @Column()
     password:string;
 
-    @Column()
+    @Column({nullable:true})
     age:number;
 
-    @Column()
+    @Column({nullable:true})
     emailConfirmed:boolean;
 
 
