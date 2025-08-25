@@ -1,10 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { BooksService } from "./books.service";
 import { CreateBookDto } from "./dtos/create-book-dtos";
 import { Book, BookStatus } from "./book.entity";
 import { Roles } from "src/Roles/roles.decorator";
 import { Role } from "src/Roles/roles.enum";
+import { AuthGuard } from "@nestjs/passport";
+import { RolesGuard } from "src/Roles/roles.guard";
 
+@UseGuards(AuthGuard('jwt'),RolesGuard)
 @Controller('books')
 export class BooksControllers{
     constructor(
@@ -19,8 +22,14 @@ export class BooksControllers{
 
         @Get()
         @Roles(Role.ADMIN)
-        async getAllBooks():Promise<Book[]>{
-            return this.booksService.findAll();
+        async getAllBooks(@Query('page') page:number = 1 , @Query('limit') limit:number = 10 ){
+            return this.booksService.findAll(page,limit);
+        }
+
+        @Get('search')
+        @Roles(Role.USER,Role.ADMIN)
+        async searchBook(@Query() query:Partial<CreateBookDto>):Promise<Book[]>{
+            return this.booksService.searchBooks(query);
         }
 
         @Get(':id')
@@ -45,11 +54,5 @@ export class BooksControllers{
         @Roles(Role.ADMIN)
         async change(@Param('id') id:string , @Body('status') status:BookStatus):Promise<Book>{
             return this.booksService.changeStatus(+id,status);
-        }
-
-        @Get('search')
-        @Roles(Role.USER)
-        async searchBook(@Query() query:Partial<CreateBookDto>):Promise<Book[]>{
-            return this.booksService.searchBooks(query);
         }
 }

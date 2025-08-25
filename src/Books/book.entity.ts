@@ -1,5 +1,6 @@
+import { Borrow } from "src/Borrows/borrow.entity";
 import { User } from "src/Users/user.entity";
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BookStatus {
     AVAILABLE ='available',
@@ -26,4 +27,8 @@ status:BookStatus;
 
 @ManyToMany(()=> User, (user)=> user.books)
 users:User[];
+
+@OneToMany(() => Borrow, (borrow) => borrow.book)
+borrows: Borrow[];
+
 }

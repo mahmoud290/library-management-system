@@ -1,5 +1,6 @@
-import { IsEnum } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Book } from "src/Books/book.entity";
+import { User } from "src/Users/user.entity";
+import { Column, Entity,ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BorrowStatus  {
 BORROWED = 'borrowed',
@@ -26,4 +27,11 @@ export class Borrow{
 
     @Column({type:'enum' , enum:BorrowStatus , default:BorrowStatus.BORROWED})
     status:BorrowStatus;
+
+
+    @ManyToOne(() => User , (user) => user.borrows , {onDelete:"CASCADE"})
+    user:User;
+
+    @ManyToOne(() => Book , (book) => book.borrows , {onDelete:"CASCADE"})
+    book:Book;
 }

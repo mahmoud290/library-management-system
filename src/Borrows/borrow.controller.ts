@@ -1,10 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req, UseGuards } from "@nestjs/common";
 import { BorrowsService } from "./borrow.service";
 import { Borrow } from "./borrow.entity";
 import { CreateBorrowDto } from "./dtos/create-borrow-dto";
 import { Roles } from "src/Roles/roles.decorator";
 import { Role } from "src/Roles/roles.enum";
+import { RolesGuard } from "src/Roles/roles.guard";
+import { AuthGuard } from "@nestjs/passport";
 
+@UseGuards(AuthGuard('jwt'),RolesGuard)
 @Controller('borrows')
 export class BorrowsController{
     constructor(
@@ -19,8 +22,9 @@ export class BorrowsController{
 
     @Get()
     @Roles(Role.ADMIN)
-    async getAllBorrows():Promise<Borrow[]>{
-        return this.borrowsService.findAll();
+    async getAllBorrows(@Query('page') page:string = '1',
+    @Query('limit') limit:string = '10'){
+        return this.borrowsService.findAll(+page, +limit);
     }
 
     @Get(':id')
@@ -40,4 +44,10 @@ export class BorrowsController{
     async delete(@Param('id') id:string):Promise<{message:string}>{
         return this.borrowsService.deleteBorrow(+id);
     }
+
+    @Get('my-borrows')
+    @Roles(Role.USER, Role.ADMIN)
+    async getMyBorrows(@Req() req): Promise<Borrow[]> {
+    return this.borrowsService.findByUserId(req.user.userId);
+}
 }

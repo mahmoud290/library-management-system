@@ -20,8 +20,19 @@ async createUser(dto:CreateUserDto):Promise<User>{
     return this.userRepository.save(user);
 }
 
-async findAll():Promise<User[]>{
-    return this.userRepository.find();
+async findAll(page:number,limit:number){
+    const[data,total] = await this.userRepository.findAndCount({
+        skip:(page - 1) * limit,
+        take:limit,
+    });
+
+    return {
+        data,
+        total,
+        page,
+        limit,
+        totalPages : Math.ceil(total/limit),
+    };
 }
 
 async findOne(id:number):Promise<User>{

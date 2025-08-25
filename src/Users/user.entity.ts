@@ -1,6 +1,7 @@
 import { Book } from "src/Books/book.entity";
+import { Borrow } from "src/Borrows/borrow.entity";
 import { Role } from "src/Roles/roles.enum";
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
 export class User{
@@ -28,4 +29,7 @@ export class User{
     @ManyToMany(() => Book, (book)=> book.users,{cascade:true})
     @JoinTable()
     books:Book[];
+
+    @OneToMany(() => Borrow , (borrow)=> borrow.user)
+    borrows:Borrow[]
 }

@@ -16,8 +16,19 @@ export class BooksService{
         return this.bookRepository.save(book);
     }
 
-    async findAll():Promise<Book[]>{
-        return this.bookRepository.find();
+    async findAll(page:number,limit:number){
+        const [data,total] = await this.bookRepository.findAndCount({
+            skip:(page - 1) * limit,
+            take:limit,
+        });
+
+        return {
+            data,
+            total,
+            page,
+            limit,
+            totalPages:Math.ceil(total / limit),
+        };
     }
 
     async findOne(id:number):Promise<Book>{
