@@ -4,10 +4,10 @@ import { CreateBookDto } from "./dtos/create-book-dtos";
 import { Book, BookStatus } from "./book.entity";
 import { Roles } from "src/Roles/roles.decorator";
 import { Role } from "src/Roles/roles.enum";
-import { AuthGuard } from "@nestjs/passport";
 import { RolesGuard } from "src/Roles/roles.guard";
+import { JwtAuthGuard } from "src/Auth/jwt-auth.guard";
 
-@UseGuards(AuthGuard('jwt'),RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('books')
 export class BooksControllers{
     constructor(

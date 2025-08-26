@@ -6,6 +6,7 @@ import { SignUpDto } from './dtos/signup-dto';
 import * as bcrypt from 'bcrypt';
 import { SignInDto } from './dtos/signin-dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from 'src/Roles/roles.enum';
 
 @Injectable()
 export class AuthService{
@@ -28,6 +29,7 @@ export class AuthService{
             name,
             email,
             password:hashedPassword,
+            role:Role.ADMIN
         });
 
         return this.authRepository.save(user);

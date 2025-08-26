@@ -5,9 +5,9 @@ import { CreateBorrowDto } from "./dtos/create-borrow-dto";
 import { Roles } from "src/Roles/roles.decorator";
 import { Role } from "src/Roles/roles.enum";
 import { RolesGuard } from "src/Roles/roles.guard";
-import { AuthGuard } from "@nestjs/passport";
+import { JwtAuthGuard } from "src/Auth/jwt-auth.guard";
 
-@UseGuards(AuthGuard('jwt'),RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('borrows')
 export class BorrowsController{
     constructor(
@@ -48,6 +48,6 @@ export class BorrowsController{
     @Get('my-borrows')
     @Roles(Role.USER, Role.ADMIN)
     async getMyBorrows(@Req() req): Promise<Borrow[]> {
-    return this.borrowsService.findByUserId(req.user.userId);
+    return this.borrowsService.findByUserId(req.user.id);
 }
 }

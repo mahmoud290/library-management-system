@@ -5,9 +5,9 @@ import { User } from "./user.entity";
 import { Roles } from "src/Roles/roles.decorator";
 import { Role } from "src/Roles/roles.enum";
 import { RolesGuard } from "src/Roles/roles.guard";
-import { AuthGuard } from "@nestjs/passport";
+import { JwtAuthGuard } from "src/Auth/jwt-auth.guard";
 
-@UseGuards(AuthGuard('jwt'),RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController{
     constructor(
