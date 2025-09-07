@@ -9,7 +9,6 @@ export class CreateBorrowDto{
     @IsNumber()
     bookId:number;
 
-    
     @IsOptional()
     returnDate:string;
 

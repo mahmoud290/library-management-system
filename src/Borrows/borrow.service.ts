@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Borrow, BorrowStatus } from "./borrow.entity";
 import { Repository } from "typeorm";
 import { CreateBorrowDto } from "./dtos/create-borrow-dto";
-import { Book } from "src/Books/book.entity";
+import { Book } from "../Books/book.entity";
 
 @Injectable()
 export class BorrowsService{
@@ -48,10 +48,10 @@ export class BorrowsService{
     };
     }
 
-    async getByID(id:number):Promise<Borrow>{
-        const borrow = await this.borrowRepository.findOneBy({id});
+    async getByID(userId:number):Promise<Borrow>{
+        const borrow = await this.borrowRepository.findOneBy({userId});
         if(!borrow){
-            throw new NotFoundException(`Borrow with id ${id} not found`);
+            throw new NotFoundException(`Borrow with id ${userId} not found`);
         }
         return borrow;
     }

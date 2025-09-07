@@ -1,5 +1,5 @@
-import { Book } from "src/Books/book.entity";
-import { User } from "src/Users/user.entity";
+import { Book } from "../Books/book.entity";
+import { User } from "../Users/user.entity";
 import { Column, Entity,ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 export enum BorrowStatus  {

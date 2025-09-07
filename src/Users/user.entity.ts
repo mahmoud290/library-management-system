@@ -1,6 +1,6 @@
-import { Book } from "src/Books/book.entity";
-import { Borrow } from "src/Borrows/borrow.entity";
-import { Role } from "src/Roles/roles.enum";
+import { Book } from "../Books/book.entity";
+import { Borrow } from "../Borrows/borrow.entity";
+import { Role } from "../Roles/roles.enum";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('users')
