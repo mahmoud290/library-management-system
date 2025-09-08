@@ -71,7 +71,7 @@ export class BorrowsService{
         if(result.affected === 0){
             throw new NotFoundException(`Borrow with id ${id} not found`);
         }
-        return {message:`Borrow with id ${id} deleted Successfully`};
+        return {message:`Borrow with id ${id} deleted successfully`};
     }
 
     async findByUserId(userId:number):Promise<Borrow[]>{

@@ -160,7 +160,7 @@ describe("BorrowsService",() => {
         const dto = {status:BorrowStatus.RETURNED} as Partial<CreateBorrowDto>;
         const existingBorrow = {userId:11,bookId:12,status:BorrowStatus.BORROWED} as Borrow;
         const mergedBorrow = {...existingBorrow,...dto} as Borrow;
-
+        
         borrowRepository.findOneBy.mockResolvedValue(existingBorrow);
         borrowRepository.merge.mockImplementation((borrow,dto) =>{
             Object.assign(borrow,dto);
@@ -186,5 +186,26 @@ describe("BorrowsService",() => {
         expect(borrowRepository.findOneBy).toHaveBeenCalledTimes(1);
         expect(borrowRepository.merge).not.toHaveBeenCalled();
         expect(borrowRepository.save).not.toHaveBeenCalled();
+    });
+
+    it("should delete and return a success message" , async () => {
+        const userId = 1;
+        borrowRepository.delete.mockResolvedValue({affected:1} as any);
+
+        const result = await service.deleteBorrow(userId);
+
+        expect(borrowRepository.delete).toHaveBeenCalledWith(userId);
+        expect(borrowRepository.delete).toHaveBeenCalledTimes(1);
+        expect(result).toEqual({message:`Borrow with id ${userId} deleted successfully`});
+    });
+
+    it("should throw NotFoundException when delete affects 0" , async () => {
+        const userId = 999;
+        borrowRepository.delete.mockResolvedValue({affected:0} as any);
+
+        await expect(service.deleteBorrow(userId)).rejects.toThrow(`Borrow with id ${userId} not found`);
+
+        expect(borrowRepository.delete).toHaveBeenCalledWith(userId);
+        expect(borrowRepository.delete).toHaveBeenCalledTimes(1);
     });
 });

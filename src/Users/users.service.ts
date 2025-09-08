@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { User } from "./user.entity";
 import { Repository } from "typeorm";
 import { CreateUserDto } from "./dtos/create-user-dto";
-import { Book } from "src/Books/book.entity";
+import { Book } from "../Books/book.entity";
 
 @Injectable()
 export class UsersService{
@@ -39,7 +39,7 @@ async findOne(id:number):Promise<User>{
     const user = await this.userRepository.findOneBy({id});
 
     if(!user){
-        throw new NotFoundException(`User With id ${id} not found`);
+        throw new NotFoundException(`User with id ${id} not found`);
     }
     return user;
 }
@@ -47,7 +47,7 @@ async updateUser(id:number , dto:Partial<CreateUserDto>):Promise<User>{
     const user = await this.userRepository.findOneBy({id});
 
     if(!user){
-        throw new NotFoundException(`User With id ${id} not found`);
+        throw new NotFoundException(`User with id ${id} not found`);
     }
 
     this.userRepository.merge(user,dto)
@@ -84,6 +84,6 @@ async applyToBook(userId:number,bookId:number):Promise<{message:string}>{
     user.books.push(book);
     await this.userRepository.save(user);
 
-    return {message:`User ${user.name} has Successfully applied to book "${book.title}"`}
+    return {message:`User ${user.name} has successfully applied to book "${book.title}"`}
 }
 }
